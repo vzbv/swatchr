@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Hipsum Basic",
+    "file": "lipsum.html",
+    "desc": "5 paragraphs of dummy text, very basic.",
+    "default": true
+  }
+]

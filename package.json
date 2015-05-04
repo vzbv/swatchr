@@ -1,0 +1,25 @@
+{
+  "name": "swatchr",
+  "version": "0.0.1",
+  "description": "A OSS based core for BootSwatchr",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dstack/swatchr.git"
+  },
+  "author": "Drew Strickland <andrew.flagship@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dstack/swatchr/issues"
+  },
+  "homepage": "https://github.com/dstack/swatchr",
+  "dependencies": {
+    "connect": "^3.3.5",
+    "dispatch": "^1.0.0",
+    "quip": "^0.1.2",
+    "serve-static": "^1.9.2"
+  }
+}
