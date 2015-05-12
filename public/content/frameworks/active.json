@@ -1,0 +1,19 @@
+[
+  {
+    "name": "BootStrap 3",
+    "location": "bootstrap-3.3.4",
+    "processor": "less",
+    "default": true,
+    "main": "less/bootstrap.less",
+    "vars": "less/variables.less",
+    "varsReplaceTarget": "@import \"variables.less\";"
+  },
+  {
+    "name": "Materialize 0.96",
+    "location": "materialize-0.96.0",
+    "processor": "sass",
+    "main": "sass/materialize.scss",
+    "vars": "sass/components/_variables.scss",
+    "varsReplaceTarget": "@import \"components/variables\";"
+  }
+]

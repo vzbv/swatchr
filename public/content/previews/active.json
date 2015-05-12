@@ -4,5 +4,10 @@
     "file": "lipsum.html",
     "desc": "5 paragraphs of dummy text, very basic.",
     "default": true
+  },
+  {
+    "name": "Hipsum Advanced",
+    "file": "adv-lipsum.html",
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
   }
 ]

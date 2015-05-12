@@ -1,17 +1,17 @@
 var connect = require('connect'),
   dispatch  = require('dispatch'),
-  quip      = require('quip'),
+  resbrev   = require('resbrev'),
   http      = require('http'),
   config    = require('./config'),
-  serveStatic = require('serve-static');
+  serveStatic = require('serve-static'),
+  slugify   = require('./lib/strToSlug'),
+  fs        = require('fs');
 
-var app = connect()
-  //app.use(quip);
-  app.use(serveStatic(__dirname+'/public'))
-  app.use('/preview', serveStatic(__dirname+'/content/previews'))
-  app.use(dispatch({
-    
-  }));
+var app = connect();
+  app.use(resbrev);
+  app.use(serveStatic(__dirname+'/public'));
+  app.use('/previews', serveStatic(__dirname+'/content/previews'));
+  app.use('/frameworks', serveStatic(__dirname+'/content/frameworks'));
 
 
 var server = http.createServer(app).listen(config.server.port);

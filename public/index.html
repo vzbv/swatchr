@@ -6,15 +6,60 @@
     <style id="dynamic-style-target"></style>
   </head>
   <body>
+    <settings></settings>
 
     <editor></editor>
     <preview></preview>
 
-    <script src="/tags/editor.tag" type="riot/tag"></script>
+    <script src="/js/vendor/less.min.js"></script>
+    <script src="/tags/settings.tag" type="riot/tag"></script>
     <script src="/tags/preview.tag" type="riot/tag"></script>
+    <script src="/tags/editor.tag" type="riot/tag"></script>
     <script src="/js/vendor/riot-compiler.min.js"></script>
 
     <script>
+      function Swatchr(){
+        riot.observable(this);
+
+        this.frameworks = [];
+        this.previews = [];
+        this.currentPreview = false;
+        this.currentFramework = false;
+
+        function getDef(list){
+          var found = false;
+          list.forEach(function(item){
+            if(item.default){
+              found = item;
+            }
+          });
+          return found;
+        }
+
+        this.setPreviewByIndex = function(indx){
+          this.currentPreview = this.previews[indx];
+          this.trigger('preview-changed');
+        }
+
+        this.setFrameworkByIndex = function(indx){
+          this.currentFramework = this.frameworks[indx];
+          this.trigger('framework-changed');
+        }
+
+        var me = this;
+        $.get('/content/frameworks/active.json', function(data){
+          me.frameworks = data;
+          me.currentFramework = getDef(me.frameworks);
+          me.trigger('updated-frameworks')
+        });
+        $.get('/content/previews/active.json', function(data){
+          me.previews = data;
+          me.currentPreview = getDef(me.previews);
+          me.trigger('updated-previews')
+        });
+      }
+
+      var appState = new Swatchr();
       riot.mount('*')
     </script>
   </body>
