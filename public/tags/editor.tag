@@ -1,8 +1,5 @@
 <editor>
-  <p>This is where the editor will go, Codemirror based</p>
-  <label> Color
-    <input type="text" name="tmpColor" onkeyup="{ reRenderCss }" value="#f00" />
-  </label>
+  <textarea name="editor">#0ff</textarea>
   <script>
 
   var cssTarget = $('#dynamic-style-target');
@@ -10,13 +7,28 @@
 
   var processors = {
     'less': {
+      mode: 'text/x-less',
       processImport: function(fw){
 
       },
-      render: function(lessInput, cb){
+      render: function(inp, cb){
+        cb = cb || function(cssOut){ console.log(cssOut); };
+        fw = me.currentFW;
+        less.render(inp, {filename: '/content/frameworks/'+fw.location+'/'+fw.main})
+        .then(function(output){
+          cb(output.css);
+        });
+      }
+    },
+    'sass': {
+      mode: 'text/x-scss',
+      processImport: function(fw){
+
+      },
+      render: function(inp, cb){
         cb = cb || function(cssOut){ console.log(cssOut); };
 
-        less.render(lessInput)
+        less.render(inp)
         .then(function(output){
           cb(output.css);
         });
@@ -24,45 +36,119 @@
     }
   };
 
-  appState.on('framework-changed', function(){
-    // this is where a re-render will fire off
+  // codemirror
+  var editor = CodeMirror.fromTextArea(this.editor, {
+    theme: 'material',
+    lineNumbers: false, // there is a display bug
+    mode: 'text/x-less'
   });
 
-  this.currentFW = {
-    name: null,
-    processor: 'less'
+  var me = this;
+
+  editor.on('change', function(){
+    me.reRenderCss(true);
+  });
+
+  appState.on('framework-changed', function(){
+    // set new framework name and vars
+    me.currentFW = appState.currentFramework;
+
+    // get new vars and put them in editor
+    me.FW.getVariables(me.currentFW, function(err, vars){
+      editor.getDoc().setValue(vars);
+    });
+
+    me.FW.getLib(me.currentFW, function(err, lib){
+      console.log(lib);
+    });
+
+    // get the lib and cache it for later
+
+    // then re-render
+    me.reRenderCss(true);
+  });
+
+
+
+  this.FW = {
+    getVariables: function(fw, cb){
+      cb = cb || function(){};
+      var varLoc = '/content/frameworks/'+fw.location+'/'+fw.vars;
+      if(appState.cache.vars[varLoc]){
+        // return it from the cache
+        cb(null, appState.cache.vars[varLoc]);
+      }
+      else{
+        $.get(varLoc, function(data){
+          var vars = data;
+          appState.cache.vars[varLoc] = vars;
+          cb(null, vars);
+        });
+      }
+
+    },
+    getLib: function(fw, cb){
+      cb = cb || function(){};
+      var libLoc = '/content/frameworks/'+fw.location+'/'+fw.main;
+      if(appState.cache.libs[libLoc]){
+        cb(null, appState.cache.libs[libLoc]);
+      }
+      else{
+        $.get(libLoc, function(data){
+          var lib = data;
+          appState.cache.libs[libLoc] = lib;
+          cb(null, lib);
+        });
+      }
+    }
   };
-  this.currentLib = function(){
-    return 'p{ color: '+this.tmpColor.value+';  }';
+
+  this.currentFW = appState.currentFramework;
+
+  this.FW.getVariables(this.currentFW, function(err, vars){
+    editor.getDoc().setValue(vars);
+  });
+
+  this.currentVars = function(){
+    return editor.getDoc().getValue();
+  }
+  this.currentCombined = function(cb){
+    cb = cb || function(){};
+    me.FW.getLib(me.currentFW, function(err, lib){
+      var replaceTarget = me.currentFW.varsReplaceTarget;
+      var combined = lib.replace(replaceTarget, me.currentVars());
+      cb(null, combined);
+    });
   }
 
   this.previewWrap = function(inp){
-    return 'preview{ '+inp+' }';
+    return ('preview{ '+inp+' }').replace(/body/gi, '');
   }
-  this.getCss = function(preview){
-    var css = this.currentLib();
-    if(preview){
-      css = this.previewWrap(css);
-    }
-    return css;
+  this.getCss = function(preview, cb){
+    cb = cb || function(){}
+    this.currentCombined(function(e, css){
+      if(preview){
+        css = me.previewWrap(css);
+      }
+      cb(null, css);
+    });
   }
 
   this.reRenderCss = function(delay){
-    var processor = this.currentFW.processor;
-    if(!delay){
-      processors[processor].render(this.getCss(true), function(css){
-        cssTarget.text(css);
+    var processor = this.currentFW.processor,
+      me = this;
+    function process(d){
+      me.getCss(d, function(e, combined){
+        processors[processor].render(combined, function(css){
+          cssTarget.text(css);
+        });
       });
     }
+    if(!delay){
+      process();
+    }
     clearTimeout(inputDelayTime);
-    var me = this;
-    inputDelayTime = setTimeout(function(){
-      processors[processor].render(me.getCss(true), function(css){
-        cssTarget.text(css);
-      });
-
-    }, 150);
-
+    inputDelayTime = setTimeout(function(){ process(true); }, 150);
   }
 
   this.on('mount', function(){

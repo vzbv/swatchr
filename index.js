@@ -4,7 +4,6 @@ var connect = require('connect'),
   http      = require('http'),
   config    = require('./config'),
   serveStatic = require('serve-static'),
-  slugify   = require('./lib/strToSlug'),
   fs        = require('fs');
 
 var app = connect();

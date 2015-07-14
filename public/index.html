@@ -3,15 +3,18 @@
   <head>
     <title>Swatchr</title>
     <script src="/js/vendor/jquery-2.1.3.min.js"></script>
+    <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
+    <link href="/css/codemirror/material.css" rel="stylesheet" />
     <style id="dynamic-style-target"></style>
   </head>
   <body>
     <settings></settings>
-
     <editor></editor>
     <preview></preview>
 
     <script src="/js/vendor/less.min.js"></script>
+    <script src="/js/vendor/codemirror.js"></script>
+    <script src="/js/vendor/modes/css.js"></script>
     <script src="/tags/settings.tag" type="riot/tag"></script>
     <script src="/tags/preview.tag" type="riot/tag"></script>
     <script src="/tags/editor.tag" type="riot/tag"></script>
@@ -25,6 +28,12 @@
         this.previews = [];
         this.currentPreview = false;
         this.currentFramework = false;
+
+        this.cache = {
+          vars:{},
+          libs:{},
+          imports: {}
+        };
 
         function getDef(list){
           var found = false;
