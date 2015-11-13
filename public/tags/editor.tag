@@ -53,8 +53,10 @@
     // set new framework name and vars
     me.currentFW = appState.currentFramework;
 
+    debugger;
     // get new vars and put them in editor
     me.FW.getVariables(me.currentFW, function(err, vars){
+      debugger;
       editor.getDoc().setValue(vars);
     });
 
@@ -74,15 +76,35 @@
     getVariables: function(fw, cb){
       cb = cb || function(){};
       var varLoc = '/content/frameworks/'+fw.location+'/'+fw.vars;
+
       if(appState.cache.vars[varLoc]){
         // return it from the cache
         cb(null, appState.cache.vars[varLoc]);
       }
       else{
-        $.get(varLoc, function(data){
-          var vars = data;
-          appState.cache.vars[varLoc] = vars;
-          cb(null, vars);
+        var stored;
+        localforage.getItem(fw.location, function(err, val) {
+                debugger;
+          if (err) {
+            console.error("[framework:cache:load]", err);
+          }
+          else {
+            if (val) {
+              stored = val;
+            }
+          }
+
+          if (stored) {
+            appState.cache.vars[varLoc] = stored;
+            cb(null, stored);
+          }
+          else {
+            $.get(varLoc, function(data){
+              var vars = data;
+              appState.cache.vars[varLoc] = vars;
+              cb(null, vars);
+            });
+          }
         });
       }
 
@@ -106,6 +128,7 @@
   this.currentFW = appState.currentFramework;
 
   this.FW.getVariables(this.currentFW, function(err, vars){
+    debugger;
     editor.getDoc().setValue(vars);
   });
 
@@ -128,12 +151,26 @@
     });
   }
 
+  this.cacheVariables = function() {
+    var loc = me.currentFW.location;
+    localforage.setItem(loc, me.currentVars(), function(err, val) {
+      if (err) {
+        console.error("failed saving", loc, err);
+      }
+      else {
+        console.log('saved', loc);
+      }
+      appState.trigger('vars-stored', me.currentFW.fw);
+    });
+  }
+
   this.reRenderCss = function(delay){
     var processor = this.currentFW.processor,
       me = this;
     function process(preview){
       me.getCss(preview, function(e, combined){
         processors[processor].render(combined, function(css){
+          me.cacheVariables();
           appState.trigger('css-rendered', css);
         });
       });

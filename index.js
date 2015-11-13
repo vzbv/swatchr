@@ -13,4 +13,13 @@ var app = connect();
   app.use('/frameworks', serveStatic(__dirname+'/content/frameworks'));
 
 
+app.use('/content/frameworks/', function(req, res, next) {
+  if(req.method == 'POST') {
+    req.end('works')
+  }
+  else {
+    next(new Error('Only POST requests allowed'));
+  }
+});
+
 var server = http.createServer(app).listen(config.server.port);

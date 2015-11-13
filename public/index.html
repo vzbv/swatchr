@@ -9,6 +9,26 @@
     <style>
     #browser-preview {
       border: none;
+      margin-top: 335px;
+    }
+    settings {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      padding: 7px;
+      color: white;
+      background-color: rgba(93, 118, 123, 1);
+    }
+    editor {
+      position: fixed;
+      left: 0;
+      top: 34px;
+      right: 0;
+      height: 300px;
+    }
+    body {
+      font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
     }
     </style>
 </head>
@@ -25,6 +45,7 @@
     <script src="/tags/preview.tag" type="riot/tag"></script>
     <script src="/tags/editor.tag" type="riot/tag"></script>
     <!-- <script src="/js/vendor/riot-compiler.min.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.2/riot+compiler.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.js"></script>
     <script>
@@ -100,6 +121,7 @@
 
     appState.on('css-rendered', function(css) {
         console.log("rendered");
+
         previewFrame[0].iFrameResizer.sendMessage({
             type: "styles",
             data: css
@@ -111,7 +133,6 @@
       initCallback: function() {
         riot.mount('*');
         if(appState.currentPreview) {
-
           appState.setPreview(appState.currentPreview);
         }
       }
