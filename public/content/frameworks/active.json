@@ -3,6 +3,15 @@
     "name": "BootStrap 3",
     "location": "bootstrap-3.3.4",
     "processor": "less",
+    "default": false,
+    "main": "less/bootstrap.less",
+    "vars": "less/variables.less",
+    "varsReplaceTarget": "@import \"variables.less\";"
+  },
+  {
+    "name": "baufoerderer.de - Bootstrap 3",
+    "location": "baufoerderer",
+    "processor": "less",
     "default": true,
     "main": "less/bootstrap.less",
     "vars": "less/variables.less",

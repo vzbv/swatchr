@@ -3,11 +3,17 @@
     "name": "Hipsum Basic",
     "file": "lipsum.html",
     "desc": "5 paragraphs of dummy text, very basic.",
-    "default": true
+    "default": false
   },
   {
     "name": "Hipsum Advanced",
     "file": "adv-lipsum.html",
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Web Corporate Design",
+    "file": "web-corporate-design.html",
+    "default": true,
     "desc": "1 Header, 5 paragraphs of dummy text, very basic."
   }
 ]

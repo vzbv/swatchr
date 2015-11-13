@@ -10,16 +10,19 @@
   <body>
     <settings></settings>
     <editor></editor>
-    <preview></preview>
 
-    <script src="/js/vendor/less.min.js"></script>
+   <iframe id="browser-preview" width="100%" src="/preview.html"></iframe>
+
+    <!-- <script src="/js/vendor/less.min.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.js"></script>
     <script src="/js/vendor/codemirror.js"></script>
     <script src="/js/vendor/modes/css.js"></script>
     <script src="/tags/settings.tag" type="riot/tag"></script>
     <script src="/tags/preview.tag" type="riot/tag"></script>
     <script src="/tags/editor.tag" type="riot/tag"></script>
-    <script src="/js/vendor/riot-compiler.min.js"></script>
-
+    <!-- <script src="/js/vendor/riot-compiler.min.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.3.1/riot+compiler.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.js"></script>
     <script>
       function Swatchr(){
         riot.observable(this);
@@ -59,6 +62,7 @@
         $.get('/content/frameworks/active.json', function(data){
           me.frameworks = data;
           me.currentFramework = getDef(me.frameworks);
+          debugger;
           me.trigger('updated-frameworks')
         });
         $.get('/content/previews/active.json', function(data){
@@ -69,7 +73,8 @@
       }
 
       var appState = new Swatchr();
-      riot.mount('*')
+      riot.mount('*');
+      $('iframe').iFrameResize(  );
     </script>
   </body>
 </html>

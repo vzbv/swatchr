@@ -15,9 +15,11 @@
 
   <script>
     this.updateFramework = function(evt){
+      debugger;
       appState.setFrameworkByIndex(evt.srcElement.value);
     }
     this.updatePreview = function(evt){
+      debugger;
       appState.setPreviewByIndex(evt.srcElement.value);
     }
   </script>
