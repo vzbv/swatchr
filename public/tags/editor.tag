@@ -121,17 +121,9 @@
     });
   }
 
-  this.previewWrap = function(inp){
-    var bodyTagRegex = /(body|html) /gi; //([^,{;]*[,{])
-      // debugger;
-    return (inp); // .replace(bodyTagRegex, '.preview-contents '); //FIXME: also add preview to all other less lines…
-  }
   this.getCss = function(preview, cb){
     cb = cb || function(){}
     this.currentCombined(function(e, css){
-      // if (preview) {
-      //   css = "preview { " + css + " }";
-      // }
       cb(null, css);
     });
   }
@@ -142,12 +134,6 @@
     function process(preview){
       me.getCss(preview, function(e, combined){
         processors[processor].render(combined, function(css){
-          // if(preview){
-          //   css = me.previewWrap(css);
-          // }
-          // debugger;
-          // cssTarget.text(css);
-          // debugger;
           appState.trigger('css-rendered', css);
         });
       });

@@ -6,7 +6,11 @@
     <script src="/js/vendor/jquery-2.1.3.min.js"></script>
     <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
     <link href="/css/codemirror/material.css" rel="stylesheet" />
-    <style id="dynamic-style-target"></style>
+    <style>
+    #browser-preview {
+      border: none;
+    }
+    </style>
 </head>
 
 <body>
@@ -62,8 +66,6 @@
                     type: "preview",
                     data: body
                 });
-
-                // me.setPreviewContent(body);
             });
         }
 
@@ -96,9 +98,6 @@
         me.setPreview(appState.currentPreview);
     })
 
-
-
-
     appState.on('css-rendered', function(css) {
         console.log("rendered");
         previewFrame[0].iFrameResizer.sendMessage({
@@ -107,10 +106,12 @@
         });
     })
 
-    riot.mount('*');
+
     previewFrame.iFrameResize({
       initCallback: function() {
+        riot.mount('*');
         if(appState.currentPreview) {
+
           appState.setPreview(appState.currentPreview);
         }
       }
