@@ -1,18 +1,18 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <title>Swatchr</title>
     <script src="/js/vendor/jquery-2.1.3.min.js"></script>
     <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
     <link href="/css/codemirror/material.css" rel="stylesheet" />
     <style id="dynamic-style-target"></style>
-  </head>
-  <body>
+</head>
+
+<body>
     <settings></settings>
     <editor></editor>
-
-   <iframe id="browser-preview" width="100%" src="/preview.html"></iframe>
-
+    <iframe id="browser-preview" width="100%" src="/preview.html"></iframe>
     <!-- <script src="/js/vendor/less.min.js"></script> -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.js"></script>
     <script src="/js/vendor/codemirror.js"></script>
@@ -21,10 +21,10 @@
     <script src="/tags/preview.tag" type="riot/tag"></script>
     <script src="/tags/editor.tag" type="riot/tag"></script>
     <!-- <script src="/js/vendor/riot-compiler.min.js"></script> -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.3.1/riot+compiler.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.2/riot+compiler.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.js"></script>
     <script>
-      function Swatchr(){
+    function Swatchr() {
         riot.observable(this);
 
         this.frameworks = [];
@@ -33,48 +33,73 @@
         this.currentFramework = false;
 
         this.cache = {
-          vars:{},
-          libs:{},
-          imports: {}
+            vars: {},
+            libs: {},
+            imports: {}
         };
 
-        function getDef(list){
-          var found = false;
-          list.forEach(function(item){
-            if(item.default){
-              found = item;
-            }
-          });
-          return found;
+        function getDef(list) {
+            var found = false;
+            list.forEach(function(item) {
+                if (item.default) {
+                    found = item;
+                }
+            });
+            return found;
         }
 
-        this.setPreviewByIndex = function(indx){
-          this.currentPreview = this.previews[indx];
-          this.trigger('preview-changed');
+        this.setPreviewByIndex = function(indx) {
+            this.currentPreview = this.previews[indx];
+            this.trigger('preview-changed');
         }
 
-        this.setFrameworkByIndex = function(indx){
-          this.currentFramework = this.frameworks[indx];
-          this.trigger('framework-changed');
+        this.setFrameworkByIndex = function(indx) {
+            this.currentFramework = this.frameworks[indx];
+            this.trigger('framework-changed');
         }
 
         var me = this;
-        $.get('/content/frameworks/active.json', function(data){
-          me.frameworks = data;
-          me.currentFramework = getDef(me.frameworks);
-          debugger;
-          me.trigger('updated-frameworks')
+        $.get('/content/frameworks/active.json', function(data) {
+            me.frameworks = data;
+            me.currentFramework = getDef(me.frameworks);
+            me.trigger('updated-frameworks')
         });
-        $.get('/content/previews/active.json', function(data){
-          me.previews = data;
-          me.currentPreview = getDef(me.previews);
-          me.trigger('updated-previews')
+        $.get('/content/previews/active.json', function(data) {
+            me.previews = data;
+            me.currentPreview = getDef(me.previews);
+            me.trigger('updated-previews')
         });
-      }
+    }
+    var appState = new Swatchr();
+    var me = this;
+    var previewFrame = $("#browser-preview");
+    this.setPreviewContent = function(content) {
+        //console.log('body', content, this.root, $(this.root));
+        $(this.root).find('.preview-contents').html(content);
+    }
+    appState.on('preview-changed', function() {
+            me.setPreview(appState.currentPreview);
+        })
+        // this.on('mount', function(){
+        //   if(appState.currentPreview){
+        //     me.setPreview(appState.currentPreview);
+        //   }
+        // })
 
-      var appState = new Swatchr();
-      riot.mount('*');
-      $('iframe').iFrameResize(  );
+    this.setPreview = function(previewObj) {
+        // select the correct thing on the list
+        // get the html contents of the file from the backend
+        $.get('/content/previews/' + previewObj.file, function(body) {
+          previewFrame[0].iFrameResizer.sendMessage(body);
+
+            // me.setPreviewContent(body);
+        });
+    }
+
+
+    riot.mount('*');
+    previewFrame.iFrameResize();
     </script>
-  </body>
+</body>
+
 </html>

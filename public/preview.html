@@ -3,8 +3,17 @@
   <head>
     <title>Swatchr</title>
     <script src="/js/vendor/jquery-2.1.3.min.js"></script>
-    <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
-    <link href="/css/codemirror/material.css" rel="stylesheet" />
+   <!--  <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
+    <link href="/css/codemirror/material.css" rel="stylesheet" /> -->
+    <script>
+    function handleContentUpdate(body) {
+      $(".preview-contents").html(body);
+    }
+
+    window.iFrameResizer = {
+      messageCallback: handleContentUpdate
+    }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.contentWindow.js"></script>
     <style id="dynamic-style-target"></style>
   </head>
@@ -15,26 +24,7 @@
 
   </div>
   <script>
-  // var me = this;
-  // this.setPreviewContent = function(content){
-  //   //console.log('body', content, this.root, $(this.root));
-  //   $(this.root).find('.preview-contents').html(content);
-  // }
-  // appState.on('preview-changed', function(){
-  //   me.setPreview(appState.currentPreview);
-  // })
-  // this.on('mount', function(){
-  //   if(appState.currentPreview){
-  //     me.setPreview(appState.currentPreview);
-  //   }
-  // })
-  // this.setPreview = function(previewObj){
-  //   // select the correct thing on the list
-  //   // get the html contents of the file from the backend
-  //   $.get('/content/previews/'+previewObj.file, function(body){
-  //     me.setPreviewContent(body);
-  //   });
-  // }
+
   </script>
 </body>
 
