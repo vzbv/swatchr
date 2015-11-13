@@ -6,8 +6,20 @@
    <!--  <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
     <link href="/css/codemirror/material.css" rel="stylesheet" /> -->
     <script>
-    function handleContentUpdate(body) {
-      $(".preview-contents").html(body);
+    function handleContentUpdate(msg) {
+      switch (msg.type) {
+        case "preview":
+          console.log("[preview:content] updated");
+          $(".preview-contents").html(msg.data);
+          break;
+        case "styles":
+          console.log("[preview:styles] updated");
+          $("#dynamic-style-target").text(msg.data);
+          break;
+        default:
+          console.error("[preview:msg:error] unknown type received");
+      }
+
     }
 
     window.iFrameResizer = {

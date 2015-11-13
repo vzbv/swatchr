@@ -24,6 +24,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.2/riot+compiler.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.js"></script>
     <script>
+    var previewFrame = $("#browser-preview");
+
     function Swatchr() {
         riot.observable(this);
 
@@ -52,6 +54,18 @@
             this.currentPreview = this.previews[indx];
             this.trigger('preview-changed');
         }
+        this.setPreview = function(previewObj) {
+            // select the correct thing on the list
+            // get the html contents of the file from the backend
+            $.get('/content/previews/' + previewObj.file, function(body) {
+                previewFrame[0].iFrameResizer.sendMessage({
+                    type: "preview",
+                    data: body
+                });
+
+                // me.setPreviewContent(body);
+            });
+        }
 
         this.setFrameworkByIndex = function(indx) {
             this.currentFramework = this.frameworks[indx];
@@ -67,38 +81,40 @@
         $.get('/content/previews/active.json', function(data) {
             me.previews = data;
             me.currentPreview = getDef(me.previews);
+
             me.trigger('updated-previews')
         });
     }
     var appState = new Swatchr();
     var me = this;
-    var previewFrame = $("#browser-preview");
+
     this.setPreviewContent = function(content) {
         //console.log('body', content, this.root, $(this.root));
         $(this.root).find('.preview-contents').html(content);
     }
     appState.on('preview-changed', function() {
-            me.setPreview(appState.currentPreview);
-        })
-        // this.on('mount', function(){
-        //   if(appState.currentPreview){
-        //     me.setPreview(appState.currentPreview);
-        //   }
-        // })
+        me.setPreview(appState.currentPreview);
+    })
 
-    this.setPreview = function(previewObj) {
-        // select the correct thing on the list
-        // get the html contents of the file from the backend
-        $.get('/content/previews/' + previewObj.file, function(body) {
-          previewFrame[0].iFrameResizer.sendMessage(body);
 
-            // me.setPreviewContent(body);
+
+
+    appState.on('css-rendered', function(css) {
+        console.log("rendered");
+        previewFrame[0].iFrameResizer.sendMessage({
+            type: "styles",
+            data: css
         });
-    }
-
+    })
 
     riot.mount('*');
-    previewFrame.iFrameResize();
+    previewFrame.iFrameResize({
+      initCallback: function() {
+        if(appState.currentPreview) {
+          appState.setPreview(appState.currentPreview);
+        }
+      }
+    });
     </script>
 </body>
 
