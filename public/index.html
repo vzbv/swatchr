@@ -47,6 +47,7 @@
     <script src="/js/vendor/modes/css.js"></script>
     <script src="/tags/settings.tag" type="riot/tag"></script>
     <script src="/tags/preview.tag" type="riot/tag"></script>
+    <script src="/tags/error.tag" type="riot/tag"></script>
     <script src="/tags/editor.tag" type="riot/tag"></script>
     <!-- <script src="/js/vendor/riot-compiler.min.js"></script> -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.js"></script>
@@ -142,7 +143,8 @@
             data: css
         });
     })
-
+    
+  
     var initialized = false;
 
     previewFrame.iFrameResize({

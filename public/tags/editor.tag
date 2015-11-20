@@ -17,10 +17,11 @@
         fw = me.currentFW;
         less.render(inp, {filename: '/content/frameworks/'+fw.location+'/'+fw.main}, function(err, output) {
           if (!err) {
+            appState.trigger('compilation:success');
             cb(output.css);
           }
           else {
-            console.log("[less:render] failed", err)
+            appState.trigger('compilation:failed', err);
           }
         });
       }

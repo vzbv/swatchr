@@ -15,7 +15,12 @@
 
 
   <button name="resetToDefault" onclick="{ resetToDefault }">Reset to Default</button>
+  <error>
   <script>
+    var me = this;
+    
+    me.errorTags = [];
+    
     this.updateFramework = function(evt){
       appState.setFrameworkByIndex(evt.srcElement.value);
     }
@@ -25,5 +30,19 @@
     this.resetToDefault = function(evt) {
       appState.trigger('clear-vars-cache');
     }
+    
+    appState.on('compilation:success', function() {
+       console.log('compilation succeeded');
+       me.errorTags.forEach(function(e) {
+           e.unmount(true);
+       })
+
+    });
+    
+    appState.on('compilation:failed', function(err) {
+       console.error('compilation failed', err);
+       me.errorTags = riot.mount('error', {err: err}); 
+    });
+
   </script>
 </settings>
