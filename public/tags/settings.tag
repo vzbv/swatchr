@@ -13,12 +13,17 @@
     </select>
   </label>
 
+
+  <button name="resetToDefault" onclick="{ resetToDefault }">Reset to Default</button>
   <script>
     this.updateFramework = function(evt){
       appState.setFrameworkByIndex(evt.srcElement.value);
     }
     this.updatePreview = function(evt){
       appState.setPreviewByIndex(evt.srcElement.value);
+    }
+    this.resetToDefault = function(evt) {
+      appState.trigger('clear-vars-cache');
     }
   </script>
 </settings>

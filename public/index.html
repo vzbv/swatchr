@@ -8,27 +8,31 @@
     <link href="/css/codemirror/material.css" rel="stylesheet" />
     <style>
     #browser-preview {
-      border: none;
-      margin-top: 335px;
+        border: none;
+        margin-top: 334px;
     }
+
     settings {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      padding: 7px;
-      color: white;
-      background-color: rgba(93, 118, 123, 1);
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        padding: 7px;
+        color: white;
+        background-color: rgba(93, 118, 123, 1);
     }
+
     editor {
-      position: fixed;
-      left: 0;
-      top: 34px;
-      right: 0;
-      height: 300px;
+        position: fixed;
+        left: 0;
+        top: 34px;
+        right: 0;
+        height: 300px;
     }
+
     body {
-      font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+        font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+        margin: 0;
     }
     </style>
 </head>
@@ -82,12 +86,23 @@
         this.setPreview = function(previewObj) {
             // select the correct thing on the list
             // get the html contents of the file from the backend
-            $.get('/content/previews/' + previewObj.file, function(body) {
-                previewFrame[0].iFrameResizer.sendMessage({
-                    type: "preview",
-                    data: body
+            var url;
+            if (previewObj.external) {
+                url = '/proxy?href=' + encodeURIComponent(previewObj.url) + '&framework=' + encodeURIComponent(appState.currentFramework.location);
+                previewFrame[0].src = url;
+            } else {
+                url = '/content/previews/' + previewObj.file;
+                $.get(url, function(body) {
+                    previewFrame[0].iFrameResizer.sendMessage({
+                        type: "preview",
+                        data: body
+                    });
                 });
-            });
+            }
+        }
+
+        this.clearVarsCache = function() {
+
         }
 
         this.setFrameworkByIndex = function(indx) {
@@ -116,7 +131,7 @@
         $(this.root).find('.preview-contents').html(content);
     }
     appState.on('preview-changed', function() {
-        me.setPreview(appState.currentPreview);
+        appState.setPreview(appState.currentPreview);
     })
 
     appState.on('css-rendered', function(css) {
@@ -128,14 +143,20 @@
         });
     })
 
+    var initialized = false;
 
     previewFrame.iFrameResize({
-      initCallback: function() {
-        riot.mount('*');
-        if(appState.currentPreview) {
-          appState.setPreview(appState.currentPreview);
+        initCallback: function() {
+            if (!initialized) {
+                console.log("[riot:init]");
+                riot.mount('*');
+                initialized = true;
+            }
+            appState.trigger('preview:init');
+            if (appState.currentPreview && !appState.currentPreview.external) {
+                appState.setPreview(appState.currentPreview);
+            }
         }
-      }
     });
     </script>
 </body>

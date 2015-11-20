@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Styleguide",
+    "file": "web-corporate-design.html",
+    "default": true,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Tables",
+    "file": "tables.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Forms",
+    "file": "forms.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Wells",
+    "file": "wells.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Alerts, Badges & Labels",
+    "file": "indicators.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Buttons",
+    "file": "buttons.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+     {
+    "name": "Panels",
+    "file": "panels.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+   {
+    "name": "Progress Bars",
+    "file": "progress-bars.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+     {
+    "name": "Tabs & Pills",
+    "file": "tabs-and-pills.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+     {
+    "name": "Pagination & Breadcrumbs",
+    "file": "navs.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Pager",
+    "file": "pagers.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+   {
+    "name": "List Groups",
+    "file": "list-groups.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  },
+  {
+    "name": "Content",
+    "file": "content.html",
+    "default": false,
+    "desc": "1 Header, 5 paragraphs of dummy text, very basic."
+  }
+]

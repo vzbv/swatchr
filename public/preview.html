@@ -1,43 +1,48 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <title>Swatchr</title>
     <script src="/js/vendor/jquery-2.1.3.min.js"></script>
-   <!--  <link href="/css/codemirror/codemirror.css" rel="stylesheet" />
-    <link href="/css/codemirror/material.css" rel="stylesheet" /> -->
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <script>
-    function handleContentUpdate(msg) {
-      switch (msg.type) {
-        case "preview":
-          console.log("[preview:content] updated");
-          $(".preview-contents").html(msg.data);
-          break;
-        case "styles":
-          console.log("[preview:styles] updated");
-          $("#dynamic-style-target").text(msg.data);
-          break;
-        default:
-          console.error("[preview:msg:error] unknown type received");
-      }
+    function updateCSSIndicators() {
+        var indicator = $('.css-font-indicator');
+        indicator.each(function() {
+            var fs = $(this).parent().css('fontSize');
+            var fw = $(this).parent().css('fontWeight');
+            $(this).text(fs + ' ' + fw);
+        })
 
+    }
+
+    function handleContentUpdate(msg) {
+        switch (msg.type) {
+            case 'preview':
+                console.log('[preview:content] updated');
+                $('body').html(msg.data);
+                break;
+            case "styles":
+                console.log('[preview:styles] updated');
+                $('#dynamic-style-target').text(msg.data);
+                break;
+            default:
+                console.error('[preview:msg:error] unknown type received');
+        }
+        updateCSSIndicators();
     }
 
     window.iFrameResizer = {
-      messageCallback: handleContentUpdate
+        messageCallback: handleContentUpdate
     }
+
+    $('head').append('<style id=dynamic-style-target></style>');
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.1/iframeResizer.contentWindow.js"></script>
-    <style id="dynamic-style-target"></style>
-  </head>
-  <body>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
 
-
-  <div class="preview-contents">
-
-  </div>
-  <script>
-
-  </script>
+<body>
 </body>
 
 </html>
